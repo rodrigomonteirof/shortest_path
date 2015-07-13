@@ -1,28 +1,26 @@
-== README
+= \Shortest path
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+== Description
 
-Things you may want to cover:
+Algorithm to search shortest path.
 
-* Ruby version
+== Ruby version
+This project was created with ruby version 2.2.0.
 
-* System dependencies
+== Database creation
+To create the database use the command db:migrate.
 
-* Configuration
+  $ rake db:create
 
-* Database creation
+== How to run the test suite
+Unit tests are written using RSpec ruby gem.
 
-* Database initialization
+You can run with command bellow:
 
-* How to run the test suite
+  $ RAILS_ENV=test rake db:migrate
+  $ bundle exec rspec
 
-* Services (job queues, cache servers, search engines, etc.)
+You can check the coverage accessing coverage/index.html, generated after test suite.
 
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+== How to run the application
+  $ bundle exec rails server
