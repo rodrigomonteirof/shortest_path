@@ -11,7 +11,6 @@ class RouterService
 
     while @found_better == false do
       place = best_route
-      debugger
 
       @found_better = place[1][:destiny] == destiny
 
