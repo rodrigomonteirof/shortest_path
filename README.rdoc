@@ -20,6 +20,10 @@ You can run with command bellow:
   $ RAILS_ENV=test rake db:migrate
   $ bundle exec rspec
 
+This project uses gem mutant for increase the coverage, to run use:
+
+  $ RAILS_ENV=test bundle exec mutant -r ./config/environment --use rspec Class(like RouterService)
+
 You can check the coverage accessing coverage/index.html, generated after test suite.
 
 == How to run the application
