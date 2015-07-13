@@ -31,5 +31,11 @@ FactoryGirl.define do
       destiny 'Z'
       distance 5
     end
+
+    trait :BA do
+      origin 'B'
+      destiny 'A'
+      distance 10
+    end
   end
 end

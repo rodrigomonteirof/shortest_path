@@ -9,13 +9,13 @@ class RouterService
     load_default(origin)
 
     while @found_better == false
-      place = best_route
+      place = best_route(origin)
 
       @found_better = place[1][:destiny] == destiny
 
       merge_with_children(place)
 
-      delete_route(best_route)
+      delete_route(place)
     end
 
     place
@@ -50,8 +50,23 @@ class RouterService
     }
   end
 
-  def best_route
-    @pending_routes.sort_by { |_k, v| v[:distance] }.first
+  def best_route(origin)
+    route = @pending_routes.sort_by { |_k, v| v[:distance] }.first
+
+    fail StandardError, 'Not found any route' unless route.present?
+
+    if loop?(route, origin)
+      delete_route(route)
+
+      # Recursivity for get best route
+      route = best_route(origin)
+    end
+
+    route
+  end
+
+  def loop?(place, origin)
+    place[1][:destiny] == origin
   end
 
   def delete_route(route)

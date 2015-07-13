@@ -76,5 +76,38 @@ describe RouterService do
         )
       end
     end
+
+    context 'when has a route with loop' do
+      let(:destiny) { 'D' }
+
+      before do
+        FactoryGirl.create(:route, :AB, map: map)
+        FactoryGirl.create(:route, :BA, map: map)
+        FactoryGirl.create(:route, :BD, map: map)
+      end
+
+      it 'delete the loop and go ahead' do
+        is_expected.to eq(
+          ['A-B-D', { distance: 25, alias: 'A-B-D', origin: 'B', destiny: 'D' }]
+        )
+      end
+    end
+
+    context 'when has only a loop route' do
+      let(:destiny) { 'D' }
+
+      before do
+        FactoryGirl.create(:route, :AB, map: map)
+        FactoryGirl.create(:route, :BA, map: map)
+      end
+
+      it { is_expected.to eq(nil) }
+
+      it 'log when has exception' do
+        expect(Rails.logger).to receive(:info)
+          .with('Error to search shortest path: Not found any route').once
+        subject
+      end
+    end
   end
 end

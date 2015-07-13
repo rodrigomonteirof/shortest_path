@@ -12,7 +12,7 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
 
   config.around(:each) do |example|
-    Timeout::timeout(2) {
+    Timeout::timeout(10) {
       example.run
     }
   end
