@@ -6,10 +6,9 @@ class RouterService
   end
 
   def shortest_path(origin, destiny)
-    routes = @map.find_routes(origin)
-    add_routes(routes)
+    add_routes(@map.find_routes(origin))
 
-    while @found_better == false do
+    while @found_better == false
       place = best_route
 
       @found_better = place[1][:destiny] == destiny
@@ -18,10 +17,10 @@ class RouterService
       delete_route(best_route)
     end
 
-   @pending_routes = {}
-   @found_better = false
+    @pending_routes = {}
+    @found_better = false
 
-   puts "The best route is #{place[0]} with #{place[1][:distance]}"
+    place
   end
 
   private
@@ -43,7 +42,7 @@ class RouterService
   end
 
   def add_route_merge(parent, route)
-     @pending_routes["#{parent[:alias]}-#{route.destiny}"] = {
+    @pending_routes["#{parent[:alias]}-#{route.destiny}"] = {
       distance: parent[:distance] + route.distance,
       alias: "#{parent[:alias]}-#{route.destiny}",
       origin: route.origin,
@@ -53,7 +52,7 @@ class RouterService
   end
 
   def best_route
-    @pending_routes.sort_by{ |k,v| v[:distance] }.first
+    @pending_routes.sort_by { |_k, v| v[:distance] }.first
   end
 
   def delete_route(route)

@@ -1,0 +1,9 @@
+AllCops:
+  Exclude:
+    - 'vendor/**/*'
+    - 'bin/**/*'
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'Rakefile'
+Documentation:
+  Enabled: false
