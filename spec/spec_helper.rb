@@ -11,6 +11,12 @@ SimpleCov.start
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
 
+  config.around(:each) do |example|
+    Timeout::timeout(2) {
+      example.run
+    }
+  end
+
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
