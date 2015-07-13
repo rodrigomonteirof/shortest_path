@@ -6,7 +6,7 @@ class RouterService
   end
 
   def shortest_path(origin, destiny)
-    add_routes(@map.find_routes(origin))
+    load_default(origin)
 
     while @found_better == false
       place = best_route
@@ -14,13 +14,14 @@ class RouterService
       @found_better = place[1][:destiny] == destiny
 
       merge_with_children(place)
+
       delete_route(best_route)
     end
 
-    @pending_routes = {}
-    @found_better = false
-
     place
+  rescue StandardError => e
+    Rails.logger.info("Error to search shortest path: #{e.message}")
+    nil
   end
 
   private
@@ -36,8 +37,7 @@ class RouterService
       distance: route.distance,
       alias: "#{route.origin}-#{route.destiny}",
       origin: route.origin,
-      destiny: route.destiny,
-      id: route.id
+      destiny: route.destiny
     }
   end
 
@@ -46,8 +46,7 @@ class RouterService
       distance: parent[:distance] + route.distance,
       alias: "#{parent[:alias]}-#{route.destiny}",
       origin: route.origin,
-      destiny: route.destiny,
-      id: route.id
+      destiny: route.destiny
     }
   end
 
@@ -57,6 +56,17 @@ class RouterService
 
   def delete_route(route)
     @pending_routes.delete(route[0])
+  end
+
+  def load_default(origin)
+    @pending_routes = {}
+    @found_better = false
+
+    routes = @map.find_routes(origin)
+    fail StandardError, 'No routes for this map' if routes.empty?
+
+    add_routes(routes)
+    routes
   end
 
   def merge_with_children(place)

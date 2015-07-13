@@ -15,4 +15,10 @@ group :development, :test do
   gem 'web-console', '~> 2.0'
   gem 'spring'
   gem 'rubocop', require: false
+  gem 'rspec'
+  gem 'simplecov'
+  gem 'factory_girl'
+  gem 'awesome_print'
+  gem 'database_cleaner'
+  gem 'mutant-rspec'
 end
