@@ -24,31 +24,7 @@ class RouterService
    puts "The best route is #{place[0]} with #{place[1][:distance]}"
   end
 
-  def delete_route(route)
-    @pending_routes.delete(route[0])
-  end
-
-  def add_merged_route(parent, route)
-     @pending_routes["#{parent[:alias]}-#{route.destiny}"] = {
-      distance: parent[:distance] + route.distance,
-      alias: "#{parent[:alias]}-#{route.destiny}",
-      origin: route.origin,
-      destiny: route.destiny,
-      id: route.id
-    }
-  end
-
-  def merge_with_children(place)
-    parent = @pending_routes[place[0]]
-
-    @map.find_routes(place[1][:destiny]).each do |route|
-      add_merged_route(parent, route)
-    end
-  end
-
-  def best_route
-    @pending_routes.sort_by{ |k,v| v[:distance] }.first
-  end
+  private
 
   def add_routes(routes)
     routes.each do |route|
@@ -64,5 +40,31 @@ class RouterService
       destiny: route.destiny,
       id: route.id
     }
+  end
+
+  def add_route_merge(parent, route)
+     @pending_routes["#{parent[:alias]}-#{route.destiny}"] = {
+      distance: parent[:distance] + route.distance,
+      alias: "#{parent[:alias]}-#{route.destiny}",
+      origin: route.origin,
+      destiny: route.destiny,
+      id: route.id
+    }
+  end
+
+  def best_route
+    @pending_routes.sort_by{ |k,v| v[:distance] }.first
+  end
+
+  def delete_route(route)
+    @pending_routes.delete(route[0])
+  end
+
+  def merge_with_children(place)
+    parent = @pending_routes[place[0]]
+
+    @map.find_routes(place[1][:destiny]).each do |route|
+      add_route_merge(parent, route)
+    end
   end
 end
