@@ -31,7 +31,7 @@ describe Map do
     context 'when dont have any route' do
       let(:routes) { nil }
 
-      it{ is_expected.to eq(nil) }
+      it { is_expected.to eq(nil) }
     end
 
     context 'when have one route' do
@@ -40,7 +40,7 @@ describe Map do
       it 'set route to map' do
         subject
         expect(map.routes.first).to eql(
-          Route.find_by(origin:'A', destiny: 'B', distance: 10)
+          Route.find_by(origin: 'A', destiny: 'B', distance: 10)
         )
       end
     end

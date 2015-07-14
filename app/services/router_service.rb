@@ -24,6 +24,10 @@ class RouterService
     nil
   end
 
+  def response(route, autonomy, price)
+    "rota #{route[0]} com custo de R$#{total_cost(route[1][:distance], autonomy, price)}"
+  end
+
   private
 
   def add_routes(routes)
@@ -33,9 +37,9 @@ class RouterService
   end
 
   def add_route(route, parent = nil)
-    @pending_routes[merge_name(route,parent)] = {
+    @pending_routes[merge_name(route, parent)] = {
       distance: sum_distance(route, parent),
-      alias: merge_name(route,parent),
+      alias: merge_name(route, parent),
       origin: route.origin,
       destiny: route.destiny
     }
@@ -77,9 +81,9 @@ class RouterService
 
   def merge_name(route, parent = nil)
     if parent.present?
-      name = "#{parent[:alias]}-#{route.destiny}"
+      "#{parent[:alias]}-#{route.destiny}"
     else
-      name = "#{route.origin}-#{route.destiny}"
+      "#{route.origin}-#{route.destiny}"
     end
   end
 
@@ -97,5 +101,9 @@ class RouterService
     else
       route.distance
     end
+  end
+
+  def total_cost(distance, autonomy, price)
+    (distance / autonomy.to_f) * Money.new(price)
   end
 end

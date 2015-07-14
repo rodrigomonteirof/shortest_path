@@ -1,5 +1,5 @@
 class MapsController < ApplicationController
-  before_action :set_map, only: [:show, :edit, :update, :destroy]
+  before_action :set_values, only: [:best_route]
   skip_before_action :verify_authenticity_token
 
   def index
@@ -8,7 +8,7 @@ class MapsController < ApplicationController
   end
 
   def create
-    @map = Map.new(name: map_params['name'])
+    @map = Map.find_or_create_by(name: map_params['name'])
     @map.load_routes(map_params['routes'])
 
     if @map.save
@@ -18,10 +18,23 @@ class MapsController < ApplicationController
     end
   end
 
+  def best_route
+    router = RouterService.new(@map)
+    route = router.shortest_path(params['origin'], params['destiny'])
+
+    if route.present?
+      render(json: router.response(route, @autonomy, @price))
+    else
+      render(json: 'Not found any route')
+    end
+  end
+
   private
 
-  def set_map
-    @map = Map.find(params[:id])
+  def set_values
+    @map = Map.find_by(name: map_params[:name])
+    @autonomy = params['autonomy']
+    @price = params['price']
   end
 
   def map_params

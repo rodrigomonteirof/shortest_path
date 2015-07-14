@@ -110,4 +110,13 @@ describe RouterService do
       end
     end
   end
+
+  describe 'response' do
+    subject { router.response(['A-B-D', { distance: 25 }], 10, 250) }
+
+    let(:map) { FactoryGirl.create(:map) }
+    let(:router) { described_class.new(map) }
+
+    it { is_expected.to eql('rota A-B-D com custo de R$6.25') }
+  end
 end
