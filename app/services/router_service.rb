@@ -32,19 +32,10 @@ class RouterService
     end
   end
 
-  def add_route(route)
-    @pending_routes["#{route.origin}-#{route.destiny}"] = {
-      distance: route.distance,
-      alias: "#{route.origin}-#{route.destiny}",
-      origin: route.origin,
-      destiny: route.destiny
-    }
-  end
-
-  def add_route_merge(parent, route)
-    @pending_routes["#{parent[:alias]}-#{route.destiny}"] = {
-      distance: parent[:distance] + route.distance,
-      alias: "#{parent[:alias]}-#{route.destiny}",
+  def add_route(route, parent = nil)
+    @pending_routes[merge_name(route,parent)] = {
+      distance: sum_distance(route, parent),
+      alias: merge_name(route,parent),
       origin: route.origin,
       destiny: route.destiny
     }
@@ -84,11 +75,27 @@ class RouterService
     routes
   end
 
+  def merge_name(route, parent = nil)
+    if parent.present?
+      name = "#{parent[:alias]}-#{route.destiny}"
+    else
+      name = "#{route.origin}-#{route.destiny}"
+    end
+  end
+
   def merge_with_children(place)
     parent = @pending_routes[place[0]]
 
     @map.find_routes(place[1][:destiny]).each do |route|
-      add_route_merge(parent, route)
+      add_route(route, parent)
+    end
+  end
+
+  def sum_distance(route, parent = nil)
+    if parent.present?
+      parent[:distance] + route.distance
+    else
+      route.distance
     end
   end
 end
