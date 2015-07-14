@@ -22,4 +22,27 @@ describe Map do
       end
     end
   end
+
+  describe '.load_routes' do
+    subject { map.load_routes(routes) }
+
+    let(:map) { FactoryGirl.create(:map) }
+
+    context 'when dont have any route' do
+      let(:routes) { nil }
+
+      it{ is_expected.to eq(nil) }
+    end
+
+    context 'when have one route' do
+      let(:routes) { ['A B 10'] }
+
+      it 'set route to map' do
+        subject
+        expect(map.routes.first).to eql(
+          Route.find_by(origin:'A', destiny: 'B', distance: 10)
+        )
+      end
+    end
+  end
 end

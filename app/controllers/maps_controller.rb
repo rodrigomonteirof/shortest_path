@@ -1,44 +1,21 @@
 class MapsController < ApplicationController
   before_action :set_map, only: [:show, :edit, :update, :destroy]
+  skip_before_action :verify_authenticity_token
 
   def index
     @maps = Map.all
-  end
-
-  def show
-  end
-
-  def new
-    @map = Map.new
-  end
-
-  def edit
+    render(json: { map: @maps })
   end
 
   def create
-    @map = Map.new(map_params)
+    @map = Map.new(name: map_params['name'])
+    @map.load_routes(map_params['routes'])
 
     if @map.save
-      redirect_to @map, notice: 'Map was successfully created.'
+      render(json: { map: @map, routes: @map.routes })
     else
-      render :new
+      render(json: { map: @map.errors })
     end
-  end
-
-  def update
-    if @map.update(map_params)
-      redirect_to @map, notice: 'Map was successfully updated.'
-    else
-      render :edit
-    end
-  end
-
-  # DELETE /maps/1
-  # DELETE /maps/1.json
-  def destroy
-    @map.destroy
-
-    redirect_to maps_url, notice: 'Map was successfully destroyed.'
   end
 
   private
@@ -48,6 +25,6 @@ class MapsController < ApplicationController
   end
 
   def map_params
-    params.require(:map).permit(:name)
+    params.permit(:name, routes: [])
   end
 end
