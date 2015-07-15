@@ -8,17 +8,7 @@ class RouterService
   def shortest_path(origin, destiny)
     load_default(origin)
 
-    while @found_better == false
-      place = best_route(origin)
-
-      @found_better = place[1][:destiny] == destiny
-
-      merge_with_children(place)
-
-      delete_route(place)
-    end
-
-    place
+    best_route(origin, destiny)
   rescue StandardError => e
     Rails.logger.info("Error to search shortest path: #{e.message}")
     nil
@@ -45,17 +35,27 @@ class RouterService
     }
   end
 
-  def best_route(origin)
+  def best_route(origin, destiny)
+    # get shortest path between available routes
     route = @pending_routes.sort_by { |_k, v| v[:distance] }.first
 
     fail StandardError, 'Not found any route' unless route.present?
 
+    # if has a loop discart route and back to start
     if loop?(route, origin)
       delete_route(route)
-
-      # Recursivity for get best route
-      route = best_route(origin)
+      route = best_route(origin, destiny)
     end
+
+    # merge route with all children
+    # example: (A-B) with (C) adds (A-B-C and A-B-E) routes
+    merge_with_children(route)
+
+    # delete route parent
+    delete_route(route)
+
+    # if it is not in destiny, it backs to start
+    route = best_route(origin, destiny) if route[1][:destiny] != destiny
 
     route
   end
