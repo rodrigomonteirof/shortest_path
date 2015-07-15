@@ -4,6 +4,18 @@
 
 Algorithm to search shortest path.
 
+== Routes
+
+The project has two routes:
+
+Post in /map to create a route
+
+  $ curl --data "name=SP&routes[]=A B 10&routes[]=B D 15&routes[]=A C 20&routes[]=C D 30&routes[]=B E 50&routes[]=D E 30" http://localhost:3000/maps
+
+Get in /bestroute/$map/$origin/$destiny/$autonomy/$price.
+
+  $ curl -isS "localhost:3000/bestroute/SP/A/D/9.5/250"
+
 == Ruby version
 This project was created with ruby version 2.2.0.
 
