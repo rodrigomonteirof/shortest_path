@@ -61,7 +61,8 @@ class RouterService
   end
 
   def loop?(place, origin)
-    place[1][:destiny] == origin
+    place[1][:destiny] == origin ||
+    place[0].split('-')[0...-1].include?(place[1][:destiny])
   end
 
   def delete_route(route)
