@@ -24,6 +24,14 @@ To create the database use the command db:migrate.
 
   $ rake db:create
 
+You can populate the database with default values:
+
+ $ rake db:seed
+
+It will insert the default routes (routes described in test) to a map with 'SIMPLE' name.
+
+  $ curl -isS "localhost:3000/bestroute/SIMPLE/A/D/10/250"
+
 == How to run the test suite
 Unit tests are written using RSpec ruby gem.
 
