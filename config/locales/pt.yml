@@ -1,0 +1,2 @@
+pt:
+  response: "rota %{route} com custo de R$%{price}"

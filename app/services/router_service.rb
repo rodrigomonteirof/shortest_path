@@ -15,7 +15,7 @@ class RouterService
   end
 
   def response(route, autonomy, price)
-    "rota #{route[0]} com custo de R$#{total_cost(route[1][:distance], autonomy, price)}"
+    I18n.translate('response', route: route[0], price: total_cost(route[1][:distance], autonomy, price))
   end
 
   private
