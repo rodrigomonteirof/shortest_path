@@ -7,6 +7,7 @@ class MapsController < ApplicationController
     render(json: { map: @maps })
   end
 
+  # curl --data "name=SP&routes[]=A B 10&routes[]=B D 15&routes[]=A C 20&routes[]=C D 30&routes[]=B E 50&routes[]=D E 30" http://localhost:3000/maps
   def create
     @map = Map.find_or_create_by(name: map_params['name'])
     @map.load_routes(map_params['routes'])
@@ -18,6 +19,7 @@ class MapsController < ApplicationController
     end
   end
 
+  # curl -isS "localhost:3000/bestroute/SP/A/D/10/250"
   def best_route
     router = RouterService.new(@map)
     route = router.shortest_path(params['origin'], params['destiny'])
