@@ -4,6 +4,40 @@
 
 Algorithm to search shortest path.
 
+== Challenge
+
+By a logistics network with a map name, you should find the shortest path.
+
+Input format example:
+
+A B 10
+
+B D 15
+
+A C 20
+
+C D 30
+
+B E 50
+
+D E 30
+
+With the persisted data, you will receive a request like:
+
+map: SP
+
+origin: A
+
+destiny: B
+
+autonomy: 10
+
+price: 2.5
+
+And return the output:
+
+A-B-D with cost 6.25
+
 == Routes
 
 The project has two routes:
