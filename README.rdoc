@@ -28,7 +28,7 @@ map: SP
 
 origin: A
 
-destiny: B
+destiny: D
 
 autonomy: 10
 
